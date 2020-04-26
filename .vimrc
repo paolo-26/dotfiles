@@ -12,10 +12,13 @@ Plugin 'altercation/vim-colors-solarized'
 call vundle#end()
 
 filetype plugin indent on   " required
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mouse Scrolling
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set mouse=nicr
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Splits and Tabbed Files
@@ -40,6 +43,7 @@ set fillchars+=vert:\
 " Set split size to 85
 nmap <F8> :vertical res 85<CR>
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -49,6 +53,7 @@ call togglebg#map("<F5>")
 colorscheme zenburn
 set cursorline
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Status Line
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -57,6 +62,7 @@ let g:lightline = {
       \ }
 set laststatus=2 "Always show lightline
 set noshowmode
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Open terminal inside Vim
@@ -80,7 +86,6 @@ let g:NERDTreeIndicatorMapCustom = {
     \ "Unknown"   : "?"
     \ }
 
-
 "let g:nerdtree_tabs_open_on_console_startup=1
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif "Close NERDTree when there are no open files
 autocmd StdinReadPre * let s:std_in=1
@@ -90,6 +95,7 @@ let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 nmap <F6> :NERDTreeToggle<CR>
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Syntastic
@@ -104,6 +110,7 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers = ['flake8']
 let g:SimpylFold_docstring_preview = 1
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => YCM
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -111,6 +118,9 @@ let g:ycm_autoclose_preview_window_after_completion=1
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Run python
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader=" "
 nmap <leader>p :w<CR>:!python3 %<CR>
 
@@ -120,6 +130,7 @@ nmap <leader>p :w<CR>:!python3 %<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 vnoremap <silent> # :s/^/#/<cr>:noh<cr>
 vnoremap <silent> -# :s/^#//<cr>:noh<cr>
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General settings
@@ -135,17 +146,29 @@ set nu "Light numbering
 "omnicomplete
 "autocmd FileType python set omnifunc=pythoncomplete#Complete
 
-"------------Start Python PEP 8 stuff----------------
-" Number of spaces that a pre-existing tab is equal to.
-au BufRead, BufNewFile *py,*pyw,*.c,*.h set tabstop=4
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Python
+au BufRead, BufNewFile *py,*pyw,*.c,*.h set tabstop=4
 au BufRead, BufNewFile *.py,*pyw set shiftwidth=4
 au BufRead, BufNewFile *.py,*.pyw set expandtab
 au BufRead, BufNewFile *.py set softtabstop=4
 set smarttab
+
+" YAML
+au! BufNewFile, BufReadPost *.{yaml, yml} set filetype=yaml foldmethod=indent
+au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+" JavaScript
+au FileType javascript setlocal sw=2 ts=2
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Python PEP 8 stuff
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Use the below highlight group when displaying bad whitespace is desired.
 highlight BadWhitespace ctermbg=red guibg=red
@@ -179,7 +202,4 @@ set backspace=indent,eol,start
 "Folding based on indentation:
 "autocmd FileType python set foldmethod=indent
 set nofoldenable
-"----------Stop python PEP 8 stuff--------------
 
-"js stuff"
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
