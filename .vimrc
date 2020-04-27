@@ -9,6 +9,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'suan/vim-instant-markdown', {'rtp': 'after'} " Markdown Preview
 call vundle#end()
 
 filetype plugin indent on   " required
