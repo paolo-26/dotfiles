@@ -78,7 +78,7 @@ theme.widget_task                               = theme.dir .. "/icons/task.png"
 theme.widget_scissors                           = theme.dir .. "/icons/scissors.png"
 theme.tasklist_plain_task_name                  = true
 theme.tasklist_disable_icon                     = true
-theme.useless_gap                               = 0
+theme.useless_gap                               = dpi(4)
 theme.titlebar_close_button_focus               = theme.dir .. "/icons/titlebar/close_focus.png"
 theme.titlebar_close_button_normal              = theme.dir .. "/icons/titlebar/close_normal.png"
 theme.titlebar_ontop_button_focus_active        = theme.dir .. "/icons/titlebar/ontop_focus_active.png"
@@ -109,16 +109,34 @@ local binclock = require("themes.powerarrow.binclock"){
     color_inactive = theme.bg_focus
 }
 
+-- Textclock
+local clockicon = wibox.widget.imagebox(theme.widget_clock)
+local clock = awful.widget.watch(
+    "date +'%a %d %b %R'", 60,
+    function(widget, stdout)
+        widget:set_markup(" " .. markup.font(theme.font, stdout))
+    end
+)
 -- Calendar
 theme.cal = lain.widget.cal({
-    --cal = "cal --color=always",
-    attach_to = { binclock.widget },
+    attach_to = { clock },
     notification_preset = {
-        font = "Terminus 10",
+        font = "Mononoki Nerd Font 11",
         fg   = theme.fg_normal,
         bg   = theme.bg_normal
     }
 })
+
+-- Calendar
+-- theme.cal = lain.widget.cal({
+--     --cal = "cal --color=always",
+--     attach_to = { binclock.widget },
+--     notification_preset = {
+--         font = "Terminus 10",
+--         fg   = theme.fg_normal,
+--         bg   = theme.bg_normal
+--     }
+-- })
 
 -- Taskwarrior
 local task = wibox.widget.imagebox(theme.widget_task)
@@ -227,6 +245,20 @@ local temp = lain.widget.temp({
 })
 --]]
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
+
+-- / weather
+local weathericon = wibox.widget.imagebox(theme.widget_weather)
+theme.weather = lain.widget.weather({
+    city_id = 3165523, -- Torino
+    notification_preset = { font = "Mononoki Nerd Font 11", fg = theme.fg_normal },
+    weather_na_markup = markup.fontfg(theme.font, "#ffffff", "N/A "),
+    settings = function()
+        descr = weather_now["weather"][1]["description"]:lower()
+        units = math.floor(weather_now["main"]["temp"])
+        widget:set_markup(markup.fontfg(theme.font, "#ffffff", descr .. " @ " .. units .. "°C "))
+    end
+})
+
 
 -- / fs
 local fsicon = wibox.widget.imagebox(theme.widget_hdd)
@@ -340,7 +372,7 @@ function theme.at_screen_connect(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(16), bg = theme.bg_normal, fg = theme.fg_normal })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(20), bg = theme.bg_normal, fg = theme.fg_normal })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -356,7 +388,7 @@ function theme.at_screen_connect(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
-            wibox.container.margin(scissors, dpi(4), dpi(8)),
+            -- wibox.container.margin(scissors, dpi(4), dpi(8)),
             --[[ using shapes
             pl(wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }, "#343434"),
             pl(task, "#343434"),
@@ -370,27 +402,29 @@ function theme.at_screen_connect(s)
             pl(binclock.widget, "#777E76"),
             --]]
             -- using separators
-            arrow(theme.bg_normal, "#343434"),
-            wibox.container.background(wibox.container.margin(wibox.widget { mailicon, theme.mail and theme.mail.widget, layout = wibox.layout.align.horizontal }, dpi(4), dpi(7)), "#343434"),
-            arrow("#343434", theme.bg_normal),
-            wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(6)), theme.bg_focus),
-            arrow(theme.bg_normal, "#343434"),
-            wibox.container.background(wibox.container.margin(task, dpi(3), dpi(7)), "#343434"),
-            arrow("#343434", "#777E76"),
+            -- arrow(theme.bg_normal, "#777E76"), --#343434
+	    arrow("alpha", "#777E76"),
+            --wibox.container.background(wibox.container.margin(wibox.widget { mailicon, theme.mail and theme.mail.widget, layout = wibox.layout.align.horizontal }, dpi(4), dpi(7)), "#343434"),
+            --arrow("#343434", theme.bg_normal),
+            --wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(6)), theme.bg_focus),
+            --arrow(theme.bg_normal, "#343434"),
+            -- wibox.container.background(wibox.container.margin(task, dpi(3), dpi(7)), "#343434"),
+            --arrow("#343434", "#777E76"),
             wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, dpi(2), dpi(3)), "#777E76"),
             arrow("#777E76", "#4B696D"),
             wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(4)), "#4B696D"),
             arrow("#4B696D", "#4B3B51"),
             wibox.container.background(wibox.container.margin(wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }, dpi(4), dpi(4)), "#4B3B51"),
             arrow("#4B3B51", "#CB755B"),
-            wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs and theme.fs.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#CB755B"),
+            -- wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs and theme.fs.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#CB755B"),
+            wibox.container.background(wibox.container.margin(wibox.widget { weathericon, theme.weather and theme.weather.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#CB755B"),
             arrow("#CB755B", "#8DAA9A"),
             wibox.container.background(wibox.container.margin(wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#8DAA9A"),
-            arrow("#8DAA9A", "#C0C0A2"),
-            wibox.container.background(wibox.container.margin(wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#C0C0A2"),
-            arrow("#C0C0A2", "#777E76"),
-            wibox.container.background(wibox.container.margin(binclock.widget, dpi(4), dpi(8)), "#777E76"),
-            arrow("#777E76", "alpha"),
+            arrow("#8DAA9A", "#4C7EC4"), --C0C0A2
+            wibox.container.background(wibox.container.margin(wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#4C7EC4"),
+            arrow("#4C7EC4", "#555E76"), --777E76
+            wibox.container.background(wibox.container.margin(clock, dpi(4), dpi(8)), "#555E76"),
+            arrow("#555E76", "alpha"),
             --]]
             s.mylayoutbox,
         },
