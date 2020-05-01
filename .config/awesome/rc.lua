@@ -98,7 +98,8 @@ local browser      = "firefox"
 local scrlocker    = "slock"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "1", "2", "3", "4", "5" }
+awful.util.tagnames = { "DEV", "WEB", "RUN", "DOC", "OTHER" }
+awful.layout.suit.tile.left.mirror = true -- ?
 awful.layout.layouts = {
     awful.layout.suit.tile,
     awful.layout.suit.floating,
@@ -692,9 +693,13 @@ awful.rules.rules = {
     { rule_any = { type = { "dialog", "normal" } },
       properties = { titlebars_enabled = false } },
 
-    -- Set Firefox to always map on the first tag on screen 1. (No!)
---    { rule = { class = "Firefox" },
---      properties = { screen = 1, tag = awful.util.tagnames[1] } },
+    -- Set Firefox to always map on the WEB tag on screen 1.
+    { rule = { class = "Firefox" },
+      properties = { screen = 1, tag = awful.util.tagnames[2]} },
+
+    -- Set Telegram to always map on the WEB tag on screen 1.
+    { rule = { class = "Telegram-Desktop" },
+      properties = { screen = 1, tag = awful.util.tagnames[2]} },
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },

@@ -17,14 +17,16 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow"
 --theme.wallpaper                                 = theme.dir .. "/wall.png"
-theme.font                                      = "Terminus 9"
+theme.font                                      = "Roboto Condensed Regular 9"
+theme.taglist_font                              = "Roboto Bold 9"
 theme.fg_normal                                 = "#FEFEFE"
 theme.fg_focus                                  = "#32D6FF"
 theme.fg_urgent                                 = "#C83F11"
 theme.bg_normal                                 = "#222222"
 theme.bg_focus                                  = "#1E2320"
 theme.bg_urgent                                 = "#3F3F3F"
-theme.taglist_fg_focus                          = "#00CCFF"
+theme.taglist_fg_focus                          = "#FEFEFE" --"#00CCFF"
+theme.taglist_bg_focus                          = "#4E7367"
 theme.tasklist_bg_focus                         = "#222222"
 theme.tasklist_fg_focus                         = "#00CCFF"
 theme.border_width                              = dpi(2)
@@ -316,6 +318,13 @@ end)
 
 -- Separators
 local arrow = separators.arrow_left
+local barcolor  = gears.color({
+    type  = "linear",
+    from  = { dpi(32), 0 },
+    to    = { dpi(32), dpi(32) },
+    -- stops = { {0, theme.bg_focus}, {0.25, "#4E7367"}, {1, theme.bg_focus} }
+    stops = { {0.25, "#4E7367"} }
+})
 
 function theme.powerline_rl(cr, width, height)
     local arrow_depth, offset = height/2, 0
@@ -352,7 +361,9 @@ function theme.at_screen_connect(s)
     gears.wallpaper.maximized(wallpaper, s, true)
 
     -- Tags
-    awful.tag(awful.util.tagnames, s, awful.layout.layouts)
+    -- awful.tag(awful.util.tagnames, s, awful.layout.layouts)
+    -- All tags open with layout 1
+    awful.tag(awful.util.tagnames, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -367,12 +378,16 @@ function theme.at_screen_connect(s)
                            awful.button({}, 5, function () awful.layout.inc(-1) end)))
     -- Create a taglist widget
     s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, awful.util.taglist_buttons)
+--    s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, awful.util.taglist_buttons, { bg_focus = barcolor })
+
+    mytaglistcont = wibox.container.background(s.mytaglist, theme.bg_focus, gears.shape.rectangle)
+    s.mytag = wibox.container.margin(mytaglistcont, dpi(0), dpi(0), dpi(5), dpi(5))
 
     -- Create a tasklist widget
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(20), bg = theme.bg_normal, fg = theme.fg_normal })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(18), bg = theme.bg_normal, fg = theme.fg_normal })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -401,6 +416,9 @@ function theme.at_screen_connect(s)
             pl(wibox.widget { neticon, net.widget, layout = wibox.layout.align.horizontal }, "#C0C0A2"),
             pl(binclock.widget, "#777E76"),
             --]]
+	    
+
+	    --[[
             -- using separators
             -- arrow(theme.bg_normal, "#777E76"), --#343434
 	    arrow("alpha", "#777E76"),
@@ -426,6 +444,18 @@ function theme.at_screen_connect(s)
             wibox.container.background(wibox.container.margin(clock, dpi(4), dpi(8)), "#555E76"),
             arrow("#555E76", "alpha"),
             --]]
+
+	    arrow("alpha", "#7FA68C"),
+            wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, dpi(2), dpi(3)), "#7FA68C"),
+            arrow("#7FA68C", "#4E7367"),
+            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(4)), "#4E7367"),
+            arrow("#4E7367", "#2E5458"),
+            wibox.container.background(wibox.container.margin(wibox.widget { weathericon, theme.weather and theme.weather.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#2E5458"),
+            arrow("#2E5458", "#22424B"),
+            wibox.container.background(wibox.container.margin(wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#22424B"),
+            arrow("#22424B", "#192B38"),
+            wibox.container.background(wibox.container.margin(clock, dpi(4), dpi(8)), "#192B38"),
+            arrow("#192B38", "alpha"),
             s.mylayoutbox,
         },
     }
