@@ -257,7 +257,7 @@ theme.weather = lain.widget.weather({
     settings = function()
         descr = weather_now["weather"][1]["description"]:lower()
         units = math.floor(weather_now["main"]["temp"])
-        widget:set_markup(markup.fontfg(theme.font, "#ffffff", descr .. " @ " .. units .. "°C "))
+        widget:set_markup(markup.fontfg(theme.font, "#ffffff", descr .. "   " .. units .. "°C "))
     end
 })
 
@@ -448,11 +448,11 @@ function theme.at_screen_connect(s)
 	    arrow("alpha", "#7FA68C"),
             wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, dpi(2), dpi(3)), "#7FA68C"),
             arrow("#7FA68C", "#4E7367"),
-            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(4)), "#4E7367"),
+            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#4E7367"),
             arrow("#4E7367", "#2E5458"),
-            wibox.container.background(wibox.container.margin(wibox.widget { weathericon, theme.weather and theme.weather.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#2E5458"),
+            wibox.container.background(wibox.container.margin(wibox.widget {nil, net.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#2E5458"),
             arrow("#2E5458", "#22424B"),
-            wibox.container.background(wibox.container.margin(wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#22424B"),
+            wibox.container.background(wibox.container.margin(wibox.widget { weathericon, theme.weather and theme.weather.widget, layout = wibox.layout.align.horizontal }, dpi(3), dpi(3)), "#22424B"),
             arrow("#22424B", "#192B38"),
             wibox.container.background(wibox.container.margin(clock, dpi(4), dpi(8)), "#192B38"),
             arrow("#192B38", "alpha"),
