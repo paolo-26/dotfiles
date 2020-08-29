@@ -1,0 +1,12 @@
+#+TITLE: Dotfiles
+#+DESCRIPTION: Personal dotfiles.
+#+AUTHOR: Paolo Grasso
+
+* Info
+This repository is intended for personal backup.
+
+* Reference
+This resository is created using the following method: [[https://www.atlassian.com/git/tutorials/dotfiles]]
+
+* License
+This software is under [[./LICENSE][MIT License]].
