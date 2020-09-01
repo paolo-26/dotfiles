@@ -2,6 +2,11 @@
 #+DESCRIPTION: Personal dotfiles.
 #+AUTHOR: Paolo Grasso
 
+#+BEGIN_HTML
+<a><img src='https://img.shields.io/github/repo-size/paolo-26/dotfiles'></a>
+<a><img src='https://img.shields.io/github/license/paolo-26/dotfiles'></a>
+#+END_HTML
+
 * Info
 This repository is intended for personal backup.
 
